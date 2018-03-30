@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +66,14 @@ namespace TourismAgency.Controllers
 
         public static void GenerateReport(int id, DateTime from, DateTime until)
         {
-            ReservationDao.FindAllSubmittedBy_between(id, from.Ticks, until.Ticks);
+            var reservatios = ReservationDao.FindAllSubmittedBy_between(id, from.Ticks, until.Ticks);
+
+            if (reservatios.Count > 0)
+            {
+                File.WriteAllText("report.txt",
+                    String.Join(Environment.NewLine, reservatios.Select(x => x.ToString())));
+                Process.Start("report.txt");
+            }
         }
     }
 }

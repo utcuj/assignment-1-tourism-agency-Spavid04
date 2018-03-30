@@ -19,6 +19,7 @@ namespace TourismAgency.Models
         public int TotalPrice { get; set; }
         public int PaidAmount { get; set; }
         public DateTime FinalPaymentDate { get; set; }
+        public DateTime ReservationDate { get; set; }
 
         public override string ToString()
         {

@@ -16,12 +16,12 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "INSERT INTO USER(username,password,userlevel) VALUES(@username,@password,@userlevel)";
+            cmd.CommandText = "INSERT INTO [USER](username,password,userlevel) VALUES(@username,@password,@userlevel); SELECT SCOPE_IDENTITY()";
             cmd.Parameters.AddWithValue("@username", u.Username);
             cmd.Parameters.AddWithValue("@password", u.Password);
             cmd.Parameters.AddWithValue("@userlevel", (int)u.UserLevel);
-
-            u.Id = (int) cmd.ExecuteScalar();
+            
+            u.Id = Convert.ToInt32(cmd.ExecuteScalar());
 
             return u;
         }
@@ -32,14 +32,14 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "SELECT * FROM USER WHERE id=@id";
+            cmd.CommandText = "SELECT * FROM [USER] WHERE id=@id";
             cmd.Parameters.AddWithValue("@id", id);
 
             User u = null;
 
             using (var reader = cmd.ExecuteReader())
             {
-                if (reader.NextResult())
+                if (reader.Read())
                 {
                     u = new User
                     {
@@ -60,14 +60,14 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "SELECT * FROM USER WHERE username=@username";
+            cmd.CommandText = "SELECT * FROM [USER] WHERE username=@username";
             cmd.Parameters.AddWithValue("@username", username);
 
             User u = null;
 
             using (var reader = cmd.ExecuteReader())
             {
-                if (reader.NextResult())
+                if (reader.Read())
                 {
                     u = new User
                     {
@@ -88,14 +88,14 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "SELECT * FROM USER WHERE userlevel=@userlevel";
+            cmd.CommandText = "SELECT * FROM [USER] WHERE userlevel=@userlevel";
             cmd.Parameters.AddWithValue("@userlevel", (int)level);
 
             List<User> users = new List<User>();
 
             using (var reader = cmd.ExecuteReader())
             {
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     users.Add(new User
                     {
@@ -116,7 +116,7 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "UPDATE USER SET username=@username,password=@password,userlevel=@userlevel WHERE id=@id";
+            cmd.CommandText = "UPDATE [USER] SET username=@username,password=@password,userlevel=@userlevel WHERE id=@id";
             cmd.Parameters.AddWithValue("@username", u.Username);
             cmd.Parameters.AddWithValue("@password", u.Password);
             cmd.Parameters.AddWithValue("@userlevel", (int)u.UserLevel);
@@ -131,7 +131,7 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "DELETE FROM USER WHERE id=@id";
+            cmd.CommandText = "DELETE FROM [USER] WHERE id=@id";
             cmd.Parameters.AddWithValue("@id", id);
 
             cmd.ExecuteNonQuery();

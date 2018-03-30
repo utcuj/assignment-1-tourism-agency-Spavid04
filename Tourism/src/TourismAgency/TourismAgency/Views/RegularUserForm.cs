@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TourismAgency.Controllers;
@@ -21,13 +22,15 @@ namespace TourismAgency.Views
 
         public RegularUserForm(int userId)
         {
-            this.userId = this.userId;
+            this.userId = userId;
 
             InitializeComponent();
 
             lastClientId = -1;
             lastHolidayId = -1;
             RefreshTab1Fields();
+
+            textBox1_TextChanged(null, null);
         }
 
         #region Tab1
@@ -65,10 +68,23 @@ namespace TourismAgency.Views
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!Regex.IsMatch(textBox4.Text, @"^[a-zA-Z]{2}\d{6}$"))
+            {
+                MessageBox.Show("PNC must be 2 letters followed by 6 digits");
+                return;
+            }
+            if (!Regex.IsMatch(textBox5.Text, @"^\d{8,12}$"))
+            {
+                MessageBox.Show("PNC must have 8-12 digits!");
+                return;
+            }
+
             lastClientId =
                 RegularUserController.SaveClient(lastClientId, textBox3.Text, textBox4.Text, textBox5.Text, textBox6.Text);
 
             RefreshTab1Fields();
+
+            textBox1_TextChanged(null, null);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -91,6 +107,9 @@ namespace TourismAgency.Views
 
             var r = RegularUserController.GetReservation(lastClientId);
 
+            if (r == null)
+                return;
+
             textBox7.Text = r.Id.ToString();
             
             textBox8.Text = r.Destination;
@@ -100,6 +119,7 @@ namespace TourismAgency.Views
             numericUpDown2.Value = r.TotalPrice;
             numericUpDown3.Value = r.PaidAmount;
             dateTimePicker1.Value = r.FinalPaymentDate;
+            dateTimePicker2.Value = r.ReservationDate;
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,8 +140,14 @@ namespace TourismAgency.Views
                 return;
             }
 
+            if (dateTimePicker2.Value < DateTime.Now)
+            {
+                MessageBox.Show("Cannot set reservation day in the past.");
+                return;
+            }
+
             lastHolidayId =
-                RegularUserController.SaveReservation(lastHolidayId, lastClientId, userId, textBox8.Text, textBox9.Text, (int)numericUpDown1.Value, label13.Text, (int)numericUpDown2.Value, (int)numericUpDown3.Value, dateTimePicker1.Value);
+                RegularUserController.SaveReservation(lastHolidayId, lastClientId, userId, textBox8.Text, textBox9.Text, (int)numericUpDown1.Value, label13.Text, (int)numericUpDown2.Value, (int)numericUpDown3.Value, dateTimePicker1.Value, dateTimePicker2.Value);
 
             RefreshTab2Fields();
         }
@@ -180,7 +206,7 @@ namespace TourismAgency.Views
 
         #endregion
 
-        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl1.SelectedIndex == 1)
             {

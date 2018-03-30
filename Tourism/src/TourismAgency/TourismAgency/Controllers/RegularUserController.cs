@@ -80,7 +80,7 @@ namespace TourismAgency.Controllers
             return null;
         }
 
-        public static int SaveReservation(int reservationId, int clientId, int userId, string destination, string hotel, int people, string details, int totalPrice, int paid, DateTime deadline)
+        public static int SaveReservation(int reservationId, int clientId, int userId, string destination, string hotel, int people, string details, int totalPrice, int paid, DateTime deadline, DateTime date)
         {
             if (reservationId >= 0) //existing reservation
             {
@@ -95,6 +95,7 @@ namespace TourismAgency.Controllers
                 r.TotalPrice = totalPrice;
                 r.PaidAmount = paid;
                 r.FinalPaymentDate = deadline;
+                r.ReservationDate = date;
 
                 ReservationDao.Update(r);
 
@@ -113,6 +114,7 @@ namespace TourismAgency.Controllers
                 r.TotalPrice = totalPrice;
                 r.PaidAmount = paid;
                 r.FinalPaymentDate = deadline;
+                r.ReservationDate = date;
 
                 r = ReservationDao.InsertReservation(r);
 

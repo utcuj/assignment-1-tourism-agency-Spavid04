@@ -26,7 +26,8 @@ CREATE TABLE RESERVATION
 	details VARCHAR(4096),
 	totalprice INT,
 	paidamount INT,
-	finalpaymentdate INT,
+	finalpaymentdate BIGINT,
+	reservationdate BIGINT,
 
 	FOREIGN KEY (clientid) REFERENCES dbo.CLIENT(id),
 	FOREIGN KEY (userid) REFERENCES dbo.[USER](id)

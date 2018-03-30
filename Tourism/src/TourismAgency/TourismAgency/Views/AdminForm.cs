@@ -22,6 +22,8 @@ namespace TourismAgency.Views
 
             lastUserId = -1;
             RefreshFields();
+
+            textBox1_TextChanged(null, null);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -59,6 +61,8 @@ namespace TourismAgency.Views
                 AdminController.Save(lastUserId, textBox3.Text, textBox4.Text);
 
             RefreshFields();
+
+            textBox1_TextChanged(null, null);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -67,6 +71,8 @@ namespace TourismAgency.Views
 
             lastUserId = -1;
             RefreshFields();
+
+            textBox1_TextChanged(null, null);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -85,7 +91,7 @@ namespace TourismAgency.Views
             AdminController.GenerateReport(lastUserId, dateTimePicker1.Value, dateTimePicker2.Value);
         }
 
-        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl1.SelectedIndex == 1 && lastUserId == -1)
             {

@@ -16,13 +16,13 @@ namespace TourismAgency.Persistence
 
             SqlCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "INSERT INTO CLIENT(name,icn,pnc,address) VALUES(@name,@icn,@pnc,@address)";
+            cmd.CommandText = "INSERT INTO CLIENT(name,icn,pnc,address) VALUES(@name,@icn,@pnc,@address); SELECT SCOPE_IDENTITY()";
             cmd.Parameters.AddWithValue("@name", c.Name);
             cmd.Parameters.AddWithValue("@icn", c.ICN);
             cmd.Parameters.AddWithValue("@pnc", c.PNC);
             cmd.Parameters.AddWithValue("@address", c.Address);
 
-            c.Id = (int)cmd.ExecuteScalar();
+            c.Id = Convert.ToInt32(cmd.ExecuteScalar());
 
             return c;
         }
@@ -40,7 +40,7 @@ namespace TourismAgency.Persistence
 
             using (var reader = cmd.ExecuteReader())
             {
-                if (reader.NextResult())
+                if (reader.Read())
                 {
                     c = new Client
                     {
@@ -69,7 +69,7 @@ namespace TourismAgency.Persistence
 
             using (var reader = cmd.ExecuteReader())
             {
-                if (reader.NextResult())
+                if (reader.Read())
                 {
                     c = new Client
                     {
@@ -97,7 +97,7 @@ namespace TourismAgency.Persistence
 
             using (var reader = cmd.ExecuteReader())
             {
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     clients.Add(new Client
                     {
