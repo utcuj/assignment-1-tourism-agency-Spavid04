@@ -35,7 +35,7 @@ namespace TourismAgency.Views
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            this.numericUpDown2.Value = this.numericUpDown1.Value - this.numericUpDown2.Value - this.numericUpDown3.Value;
+            this.numericUpDown2.Value = this.numericUpDown1.Value - this.numericUpDown3.Value;
         }
     }
 }
